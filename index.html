@@ -1,7 +1,53 @@
 <html>
 <body onload="init();">
+
+<h1>Hexdate</h1>
+
 <div>Today is <span id="hexdate"></span></div>
 <div>The current time is <span id="hextime"></span></div>
+
+<h2>Huh?</h2>
+
+<p>
+Hexdate is a time system based on subdividing the seconds since the Unix epoch
+by digits when formatted in base 16. This leads to time divisions that are
+roughly analogous to commonly used ones in the 365/24/60 system based on Earth's
+rotation and revolution periods:
+</p>
+
+<ul>
+<li>second: this is equivalent to the SI base unit second</li>
+<li>minex: 256 seconds, roughly four and a quarter minutes</li>
+<li>hexur: 16 minex, approximately an hour and eight minutes</li>
+<li>dex: 256 minex, about 18.2 hours or 2/3 of a day</li>
+<li>wex: 8 dex</li>
+<li>mex: 2 wex or 16 dex, a little over 12 days</li>
+<li>yex: 16 mex, 194.2 days, or a little over half a year</li>
+</ul>
+
+<h2>Why?</h2>
+
+<p>
+Mostly for fun, though there are a few advantages:
+</p>
+
+<ul>
+<li>Compact: a two-digit mex/dex communicates about as much information as a
+four-digit month/day, as does a two-digit hexur/minex compared to a four-digit
+hour/minute.</li>
+<li>Simple: All mex have the same number of dex, and an integer number of wex.
+There are no time zones, daylight savings time, leap days, or leap seconds.</li>
+<li>Astronomically agnostic: The system is equally as (in)convenient on Earth as
+it is outside of Earth.</li>
+</ul>
+
+<h2>Try it!</h2>
+
+<p>
+The date and time displayed below was initialized to the current time when this
+page was loaded. Edit the value of either the Earth date or hexdate, and it will
+be converted to display in the other format.
+</p>
 
 <div>
 <input oninput="convert(this);" type="datetime-local" step="1" id="time" />
