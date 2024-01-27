@@ -1,0 +1,165 @@
+<html>
+<body onload="init();">
+<div>Today is <span id="hexdate"></span></div>
+<div>The current time is <span id="hextime"></span></div>
+
+<div>
+<input oninput="convert(this);" type="datetime-local" step="1" id="time" />
+<input oninput="convert(this);" type="number" id="utchour" min="-12" max="14" />
+<input oninput="convert(this);" type="number" id="utcminute" step="15" min="0" max="45" />
+</div>
+
+<div>
+<input oninput="convert(this);" id="inyex" size="4" />
+<select oninput="convert(this);" id="inmex"></select>
+<select oninput="convert(this);" id="index"></select>
+<input oninput="convert(this);" id="inmin" size="2"/>
+<input oninput="convert(this);" id="insec" size="2"/>
+</div>
+
+<button onclick="nowify();">Reset to now</button>
+
+<script>
+let dexes = [
+    "None",
+    "Ones",
+    "Deuce",
+    "Thirds",
+    "Qua",
+    "Fi'",
+    "Hex",
+    "Septer" 
+];
+
+let mexes = [
+    "Zune",
+    "Unuary",
+    "Deucember",
+    "Tercember",
+    "Quadember",
+    "Pentember",
+    "Hexember",
+    "Setember",
+    "Octember",
+    "Nuvember",
+    "Agust",
+    "Bay",
+    "Chuly",
+    "Mard",
+    "Ebril",
+    "Fenuary"
+];
+
+function dexname(dex) {
+    return dexes[dex % 8] + (dex < 8 ? "day" : "dee");
+}
+
+function componentize(ts) {
+    let sse = Math.floor(ts / 1000);
+    let modyex = sse % 16777216 + 16777216;
+
+    return {
+        'second' : modyex % 256,
+        'minex'  : Math.floor(modyex/256) % 256,
+        'dex'    : Math.floor(modyex/65536) % 16,
+        'mex'    : Math.floor(modyex/1048576) % 16,
+        'yex'    : Math.floor(sse/16777216)
+    };
+}
+
+function getoff() {
+    let offhour = document.getElementById('utchour').value;
+    let offminute = document.getElementById('utcminute').value;
+    let offsign = offhour == 0 ? 1 : offhour / Math.abs(offhour);
+    return off = offhour * 3600000 + offsign * 60000 * offminute;
+}
+
+function setdate(ts, setoff = false) {
+    let d = new Date(ts);
+    let off = setoff ? d.getTimezoneOffset() * -60000 : getoff();
+    let ld = new Date(d.getTime() + off);
+
+    document.getElementById('time').value = ld.toISOString().split('.')[0];
+    document.getElementById('utchour').value = off / 3600000;
+    document.getElementById('utcminute').value = ((off/1000) + 60) % 60;
+}
+
+function sethexdate(ts) {
+    let x = componentize(ts);
+
+    document.getElementById('inyex').value = prex(x.yex);
+    document.getElementById('inmex').value = x.mex;
+    document.getElementById('index').value = x.dex;
+    document.getElementById('inmin').value = prex(x.minex);
+    document.getElementById('insec').value = prex(x.second);
+}
+
+function getdate() {
+    let d = new Date(document.getElementById('time').value + 'Z');
+
+    return d.getTime() - getoff();
+}
+
+function gethexdate() {
+    let yex = parseInt(document.getElementById('inyex').value, 16);
+    let mex = document.getElementById('inmex').value;
+    let dex = document.getElementById('index').value;
+    let min = parseInt(document.getElementById('inmin').value, 16);
+    let hex = parseInt(document.getElementById('insec').value, 16);
+
+    return ((yex * 65536 + mex * 4096 + dex * 256 + min) * 256 + hex) * 1000;
+}
+
+function convert(elem) {
+    switch (elem.id) {
+        case 'time': case 'utchour': case 'utcminute':
+        sethexdate(getdate());
+        break;
+        case 'inyex': case 'inmex': case 'index': case 'inmin': case 'insec':
+        setdate(gethexdate());
+        break;
+        default: break;
+    }
+}
+
+function nowify() {
+    let ts = new Date().getTime();
+
+    setdate(ts, true);
+    sethexdate(ts);
+}
+
+function init() {
+    for (let i = 0; i < 16; i++) {
+        let mex = document.createElement("option");
+        let dex = document.createElement("option");
+
+        mex.innerHTML = `${i.toString(16)} - ${mexes[i]}`;
+        mex.value = i;
+
+        document.getElementById('inmex').append(mex);
+
+        dex.innerHTML = `${i.toString(16)} - ${dexname(i)}`;
+        dex.value = i;
+
+        document.getElementById('index').append(dex);
+    }
+
+    nowify();
+    update();
+    window.setInterval(update, 1000);
+}
+
+function prex(num) {
+    return num.toString(16).padStart(2, '0').toUpperCase()
+}
+
+function update() {
+    let now = componentize(Date.now());
+
+    document.getElementById("hexdate").innerText = `${dexname(now.dex)}, ${mexes[now.mex]} ${now.dex}, yex ${prex(now.yex)}`; 
+    document.getElementById("hextime").innerText = `${prex(now.minex)}:${prex(now.second)}`;
+}
+</script>
+</body>
+</html>
