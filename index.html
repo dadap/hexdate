@@ -2,13 +2,47 @@
 <head>
 <title>hexdate</title>
 <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+body {
+    background-color: #111;
+    color: #fff;
+    font-family: sans-serif;
+    padding: 1em;
+}
+
+.display {
+    background-color: #000;
+    text-align: center;
+    padding: 1em;
+    margin: 1em;
+    font-size: 125%;
+}
+
+.display input, .display button, .display select {
+    background-color: #222;
+    color: #fff;
+    font-size: 100%;
+    margin: 0.1em;
+}
+
+.display button {
+    margin: 1em;
+}
+
+.subdisplay {
+    display: inline;
+    white-space: nowrap;
+}
+</style>
 </head>
 <body onload="init();">
 
 <h1>Hexdate</h1>
 
+<div class="display">
 <div>Today is <span id="hexdate"></span></div>
 <div>The current time is <span id="hextime"></span></div>
+</div>
 
 <h2>Huh?</h2>
 
@@ -37,22 +71,27 @@ page was loaded. Edit the value of either the Earth date or hexdate, and it will
 be converted to display in the other format.
 </p>
 
-<div>
+<div class="display">
+<div class="subdisplay">
+Date and time:
 <input oninput="convert(this);" type="datetime-local" step="1" id="time" />
+</div>
+<div class="subdisplay">
+UTC offset (hours, minutes):
 <input oninput="convert(this);" type="number" id="utchour" min="-12" max="14" />
 <input oninput="convert(this);" type="number" id="utcminute" step="15" min="0" max="45" />
 </div>
 
+<div><button onclick="nowify();">Reset to now</button></div>
+
 <div>
-<input oninput="convert(this);" id="inyex" size="4" />
-<select oninput="convert(this);" id="inmex"></select>
-<select oninput="convert(this);" id="index"></select>
-<input oninput="convert(this);" id="inmin" size="2"/>
-<input oninput="convert(this);" id="insec" size="2"/>
+<div class="subdisplay">yex: <input oninput="convert(this);" id="inyex" size="4" /></div>
+<div class="subdisplay">mex: <select oninput="convert(this);" id="inmex"></select></div>
+<div class="subdisplay">dex: <select oninput="convert(this);" id="index"></select></div>
+<div class="subdisplay">tix: <input oninput="convert(this);" id="inmin" size="2"/>
+<input oninput="convert(this);" id="insec" size="2"/></div>
 </div>
-
-<button onclick="nowify();">Reset to now</button>
-
+</div>
 <h2>Why?</h2>
 
 <p>
