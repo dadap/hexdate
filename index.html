@@ -33,6 +33,10 @@ body {
     display: inline;
     white-space: nowrap;
 }
+
+.dynamic {
+    font-weight: bold;
+}
 </style>
 </head>
 <body onload="init();">
@@ -40,8 +44,8 @@ body {
 <h1>Hexdate</h1>
 
 <div class="display">
-<div>Todex is <span id="hexdate"></span></div>
-<div>The current tix is <span id="hextime"></span></div>
+<div class="subdisplay">Todex is <span class="dynamic" id="hexdate"></span></div>
+<div class="subdisplay">The current tix is <span class="dynamic" id="hextime"></span></div>
 </div>
 
 <h2>Huh?</h2>
