@@ -72,12 +72,12 @@ be converted to display in the other format.
 </p>
 
 <div class="display">
+<div class="subdisplay">Date and time:</div>
 <div class="subdisplay">
-Date and time:
 <input oninput="convert(this);" type="datetime-local" step="1" id="time" />
 </div>
+<div class="subdisplay">UTC offset (hours, minutes):</div>
 <div class="subdisplay">
-UTC offset (hours, minutes):
 <input oninput="convert(this);" type="number" id="utchour" min="-12" max="14" />
 <input oninput="convert(this);" type="number" id="utcminute" step="15" min="0" max="45" />
 </div>
