@@ -141,12 +141,69 @@ let mexes = [
     "Fenuary"
 ];
 
+let leaps = [
+    Date.UTC(1972, 1), // TAI = UTC + 10
+    Date.UTC(1972, 7),
+    Date.UTC(1973, 1),
+    Date.UTC(1974, 1),
+    Date.UTC(1975, 1),
+    Date.UTC(1976, 1),
+    Date.UTC(1977, 1),
+    Date.UTC(1978, 1),
+    Date.UTC(1979, 1),
+    Date.UTC(1980, 1),
+    Date.UTC(1981, 7),
+    Date.UTC(1982, 7),
+    Date.UTC(1983, 7),
+    Date.UTC(1985, 7),
+    Date.UTC(1988, 1),
+    Date.UTC(1990, 1),
+    Date.UTC(1991, 1),
+    Date.UTC(1992, 7),
+    Date.UTC(1993, 7),
+    Date.UTC(1994, 7),
+    Date.UTC(1996, 1),
+    Date.UTC(1997, 7),
+    Date.UTC(1999, 1),
+    Date.UTC(2006, 1),
+    Date.UTC(2009, 1),
+    Date.UTC(2012, 7),
+    Date.UTC(2015, 7),
+    Date.UTC(2017, 1)
+];
+
 function dexname(dex) {
     return dexes[dex % 8] + (dex < 8 ? "day" : "dee");
 }
 
+function utctotai(utc) {
+    for (let i = leaps.length - 1; i >= 0; i--) {
+        if (utc > leaps[i]) {
+            return utc + 10000 + i * 1000;
+        }
+    }
+
+    return utc;
+}
+
+function taitoutc(tai) {
+    if (tai < leaps[0] + 10000) {
+        return tai;
+    }
+
+    for (let i = leaps.length - 1; i >= 0; i--) {
+        let off = 10000 + i * 1000;
+
+        if (tai > leaps[i] + off) {
+            return tai - off;
+        }
+    }
+
+    return tai;
+}
+
 function componentize(ts) {
-    let sse = Math.floor(ts / 1000);
+    let sse = Math.floor(utctotai(ts) / 1000);
     let modyex = sse % 16777216 + 16777216;
 
     return {
@@ -165,9 +222,9 @@ function getoff() {
     return off = offhour * 3600000 + offsign * 60000 * offminute;
 }
 
-function setdate(ts, setoff = false) {
-    let d = new Date(ts);
-    let off = setoff ? d.getTimezoneOffset() * -60000 : getoff();
+function setdate(ts, from_clock = false) {
+    let d = new Date(from_clock ? ts : taitoutc(ts));
+    let off = from_clock ? d.getTimezoneOffset() * -60000 : getoff();
     let ld = new Date(d.getTime() + off);
 
     document.getElementById('time').value = ld.toISOString().split('.')[0];
