@@ -110,6 +110,29 @@ There are no time zones, daylight savings time, leap days, or leap seconds.</li>
 it is outside of Earth.</li>
 </ul>
 
+<h2>Notes</h2>
+
+<ul>
+<li>Hextime terms (e.g. minex, wex, yex) have identical singular and plural
+forms. For example: one dex, two dex, …</li>
+<li>When expressed in numeric form, the dex of the mex and the mex of the yex
+may be presented in either base 10 or base 16. All other numeric representations
+should be given in base 16 under normal circumstances.</li>
+<li>Because there is a whole number of wex in a mex, the dex of the wex can
+always be determined by the numbered dex of the mex. The mex is divided into
+"Wex A" for days 0-7 and "Wex B" for days 8-15. The named dex of wex A end with
+the suffix -day, and the dex of wex B use the same root names with the suffix
+-dee. For example, dex 0 is "Noneday" and dex 7 is "Nonedee".</li>
+<li>Hexdate is calculated based on the number of elapsed seconds, <em>including
+leap seconds</em>, since the Unix epoch, 1970-01-01 00:00 UTC. However, for
+simplicity, this is only true for dates starting from 1972-01-01 00:00 UTC, as
+the delta between TAI and UTC from that date is constrained to a whole number of
+seconds.</li>
+<li>Any similarity between the names of dex/mex and days/months is purely
+coincidental. They were definitely not deliberately crafted to cause confusion,
+because why would anybody do such a thing on purpose?</li>
+</ul>
+
 <script>
 let dexes = [
     "None",
